@@ -8,6 +8,12 @@ const PATH={
     SHOPKEPERLOGIN:'/shopkeper/login',
     USERPROFILE:'/user/profile',
     SHOPKEPERPROFILE:'/shopkeper/profile',
-    PROFILE:'/profile'
+    PROFILE:'/profile',
+    USERUPDATEPROFILE:'/user/update/profile',
+    SHOPKEPERUPDATEPROFILE:'/shopkeper/update/profile',
+    ADDMEDICINE:'/shoapkeper/addmedicine',
+    ALLMEDICINEOFSINGLEADMIN:'/shoapkeper/single/allmedicine',
+    UPDATEMEDICINE:'/update/medicine',//show All medicine of single user
+    UPDATEMEDICINEBYADMIN:'/update/medicine/:id'
 }
 export default PATH

@@ -23,3 +23,14 @@ export const TYPE={
     getType:'get/type',
     removeType:'remove/type'
 }
+
+
+export const SINGLEADMINMEDICINE={
+    updatemedicine:'update/medicine',
+    removemedicine:'remove/medicine'
+}
+
+export const ALLMEDICINE={
+    addallMedicineHome:'atHome/add/allmedicine',
+    removeAllMedicineHome:'atHome/remove/medicine'
+}

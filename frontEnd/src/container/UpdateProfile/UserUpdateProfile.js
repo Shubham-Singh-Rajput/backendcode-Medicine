@@ -11,11 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import VALIDATION from './../../redux/action/Token/index';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import PATH from './../../config/webPath';
-import TYPECHECK from './../../redux/action/Type/index';
+import { useEffect } from 'react';
+
 
 function Copyright() {
   return (
@@ -50,68 +50,64 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserSignUp() {
+export default function USERUPDATEPROFILE({history}) {
   const classes = useStyles();
-  const dispatch=useDispatch()
-  const [name,setName]=useState('')
-  const [email,setEmail]=useState('')
+  const TOKENS=useSelector(({Token})=>Token)
+  const USERPROFILE=useSelector(({Profile})=>Profile)
+  const [name,setName]=useState(USERPROFILE?.currentUser?.name)
+  const [email]=useState(USERPROFILE?.currentUser?.email)
   const [password,setPassword]=useState('')
-  const [Address,setAddress]=useState('')
-  const [mobileNumber,setmobileNumber]=useState('')
+  const [Address,setAddress]=useState(USERPROFILE?.currentUser?.Address)
+  const [mobileNumber]=useState(USERPROFILE?.currentUser?.mobileNo)
   const [file,setFile]=useState('')
   const [err,setError]=useState({
-      email:'',
-      password:'',
-      name:'',
-      Address:'',
-      mobileNo:'',
       msg:''
   })
   const imageUpload=(e)=>{
       setFile(e.target.files[0])
   }
-  const TOKENS=useSelector(({Token})=>Token)
-  const SubmitDetail=(e)=>{
+  useEffect(()=>{
+        if(!USERPROFILE.currentUser){
+            history.push(PATH.PROFILE)
+        }
+  },[USERPROFILE,history])
+//   const {type,_id}=USERPROFILE.currentUser
+  const SUBMIT=(e)=>{
       e.preventDefault()
-    var data = new FormData()
-    data.append('name',name)
-    data.append('email',email)
-    data.append('password',password)
-    data.append('Address',Address)
-    data.append('mobileNo',mobileNumber)
-    data.append('image',file)
-      fetch('http://localhost:2000/user/signup',{
-        method: 'POST',
-        body: data,
-        
+      var data = new FormData()
+        data.append('name',name||USERPROFILE?.currentUser?.name)
+        data.append('email',email)
+        data.append('password',password||USERPROFILE?.currentUser?.password)
+        data.append('Address',Address||USERPROFILE?.currentUser?.Address)
+        data.append('mobileNo',mobileNumber)
+        data.append('image',file)
+      fetch('http://localhost:2000/user/updateprofile',{
+        method:"POST",
+        body:data,
+        headers:{
+            token:TOKENS
+        }
       }).then(d=>d.json()).then(d=>{
-          
-          if(Object.keys(d.err).length>0 || d.msg){
-            setError((err)=>({...err,...d.err,...d.msg}))
-          } 
-          else{
-            dispatch(VALIDATION.createToken(d.data[0]))
-            dispatch(TYPECHECK.getType(d.data[1]))
+          if(Object.keys(d.err).length!==0){
+              setError((s)=>({...s,...d.err}))
           }
-      }).catch(e=>{
-        dispatch(VALIDATION.removeToken())
-        dispatch(TYPECHECK.removeType())
+          else{
+              history.push(PATH.PROFILE)
+          }
       })
-
   }
-  
   return (
     <>
-    {TOKENS.length===0?<Container component="main" maxWidth="xs">
+    {TOKENS.length!==0?<Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Update Profile
         </Typography>
-        <form className={classes.form} noValidate onSubmit={SubmitDetail}>
+        <form className={classes.form} noValidate onSubmit={SUBMIT} >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -122,9 +118,9 @@ export default function UserSignUp() {
                 fullWidth
                 id="Name"
                 label="Name"
+                value={name}
                 autoFocus
-                onChange={(e)=>{setName(e.target.value)
-                     setError((s)=>({...s,name:'',msg:''}))}}
+                onChange={(e)=>{setName(e.target.value)}}
               />
               <div style={{color:"red"}}>{err.name}</div>
             </Grid>
@@ -136,14 +132,11 @@ export default function UserSignUp() {
                 id="mobileNo"
                 label="Mobile Number"
                 name="mobileNo"
+                value={mobileNumber}
                 autoComplete="mnumber"
-                onChange={(e)=>{
-                    setmobileNumber(e.target.value)
-                    setError((s)=>({...s,mobileNo:'',msg:''}))
-                }
-                }
+                aria-readonly
+                
               />
-              <div style={{color:"red"}}>{err.mobileNo}</div>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -153,13 +146,10 @@ export default function UserSignUp() {
                 id="email"
                 label="Email Address"
                 name="email"
+                value={email}
                 autoComplete="email"
-                onChange={(e)=>{setEmail(e.target.value)
-                    setError((s)=>({...s,email:'',msg:''}))
-                }
-                }
+                aria-readonly
               />
-              <div style={{color:"red"}}>{err.email}</div>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -172,10 +162,8 @@ export default function UserSignUp() {
                 id="password"
                 autoComplete="current-password"
                 onChange={(e)=>{setPassword(e.target.value)
-                    setError((s)=>({...s,password:'',msg:''}))
                 }}
               />
-              <div style={{color:"red"}}>{err.password}</div>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -186,13 +174,12 @@ export default function UserSignUp() {
                 label="Address"
                 type="text"
                 id="Address"
+                value={Address}
                 autoComplete="current-Address"
                 onChange={(e)=>{setAddress(e.target.value)
-                    setError((s)=>({...s,Address:'',msg:''}))
                 }}
               />
-              <div style={{color:"red"}}>{err.Address}</div>
-
+              
             </Grid>
             <Grid item xs={12}>
                 <TextField 
@@ -214,7 +201,7 @@ export default function UserSignUp() {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            Update
           </Button>
         </form>
       </div>
@@ -227,3 +214,31 @@ export default function UserSignUp() {
 }
 
 
+// const SubmitDetail=(e)=>{
+//     e.preventDefault()
+//   var data = new FormData()
+//   data.append('name',name)
+//   data.append('email',email)
+//   data.append('password',password)
+//   data.append('Address',Address)
+//   data.append('mobileNo',mobileNumber)
+//   data.append('image',file)
+//     fetch('http://localhost:2000/user/signup',{
+//       method: 'POST',
+//       body: data,
+      
+//     }).then(d=>d.json()).then(d=>{
+        
+//         if(Object.keys(d.err).length>0 || d.msg){
+//           setError((err)=>({...err,...d.err,...d.msg}))
+//         } 
+//         else{
+//           dispatch(VALIDATION.createToken(d.data[0]))
+//           dispatch(TYPECHECK.getType(d.data[1]))
+//         }
+//     }).catch(e=>{
+//       dispatch(VALIDATION.removeToken())
+//       dispatch(TYPECHECK.removeType())
+//     })
+
+// }
