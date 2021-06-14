@@ -1,6 +1,8 @@
 
 import { PROFILE } from './../../actionTypes/index';
+// function use to store the profile detail of shopkeoper
 const SHOP_KEPER={
+    // used to store the detial of proofile of shopkeeper
     PROFILE:(dispatch,store)=>{
         return fetch('http://localhost:2000/shoapkeper/profile',{
             headers:{

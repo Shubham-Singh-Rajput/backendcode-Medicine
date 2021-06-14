@@ -1,3 +1,5 @@
+// LOGIN PAGE FOR USER AND SHOP KEPER
+
 import React, { useMemo } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,6 +17,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import VALIDATION from '../../redux/action/Token/index';
 import TYPECHECK from './../../redux/action/Type/index';
+import LoderOperation from './../../redux/action/Loder/index';
 
 function Copyright() {
   return (
@@ -68,6 +71,7 @@ export default function LOGIN() {
     const [err,setError]=useState('')
     const SUBMIT=(e)=>{
         e.preventDefault()
+        dispatch(LoderOperation.show())
         fetch(url,{
             method:"POST",
             body:JSON.stringify({email:email,password:password}),
@@ -75,6 +79,7 @@ export default function LOGIN() {
                 'Content-Type': 'application/json'
             }
         }).then(d=>d.json()).then(d=>{
+          dispatch(LoderOperation.hide())
             if(Object.keys(d.err).length>0){
                 setError(d.err.msg)
             }
@@ -84,6 +89,7 @@ export default function LOGIN() {
                 history.push(PATH.HOME)
             }
         }).catch(e=>{
+          dispatch(LoderOperation.hide())
             dispatch(VALIDATION.removeToken())
             dispatch(TYPECHECK.removeType())
             history.push(PATH.HOME)

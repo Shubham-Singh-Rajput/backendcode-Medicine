@@ -5,7 +5,7 @@ const buymedicine=mongoose.Schema({
         ref:'userProfile'
     },
     medicineId:{
-        type:mongoose.Schema.type.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'Addmedicine'
     },
     buy:{

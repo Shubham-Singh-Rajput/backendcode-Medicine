@@ -34,3 +34,8 @@ export const ALLMEDICINE={
     addallMedicineHome:'atHome/add/allmedicine',
     removeAllMedicineHome:'atHome/remove/medicine'
 }
+
+export const LODER={
+    showLoder:'show/loder',
+    hideLoder:'hide/loder'
+}

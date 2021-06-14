@@ -1,5 +1,6 @@
 import { PROFILE } from './../actionTypes/index';
 const initialState={}
+// this store is used to store the profile of user or shopkeper
 const Profile=(state,action)=>{
     state=state||initialState
     switch(action.type){

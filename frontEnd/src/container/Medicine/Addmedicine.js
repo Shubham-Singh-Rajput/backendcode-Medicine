@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import {useState} from 'react'
 import PATH from './../../config/webPath';
+import LoderOperation from './../../redux/action/Loder/index';
+import { useDispatch } from 'react-redux';
 
 function Copyright() {
   return (
@@ -63,6 +65,7 @@ export default function AddingMedicine({history}) {
   const classes = useStyles();
     const TOKEN=useSelector(({Token})=>Token)
     const TYPE=useSelector(({Type})=>Type)
+    const dispatch=useDispatch()
     const [name,setName]=useState('')
     const [quantity,setQuantity]=useState('')
     const [price,setPrice]=useState('')
@@ -81,6 +84,7 @@ export default function AddingMedicine({history}) {
       data.append('quantity',quantity)
       data.append('price',price)
       data.append('image',image)
+      dispatch(LoderOperation.show())
       fetch('http://localhost:2000/shoapkeper/addmedicine',{
         method:'POST',
         headers:{
@@ -89,12 +93,15 @@ export default function AddingMedicine({history}) {
         body:data
       }).then(d=>d.json()).then(d=>{
         if(Object.keys(d.err).length>0){
+          dispatch(LoderOperation.hide())
           setError((s)=>({...s,...d.err}))
         }
         else{
+          dispatch(LoderOperation.hide())
           history.push(PATH.ALLMEDICINEOFSINGLEADMIN)
         }
       }).catch(e=>{
+        dispatch(LoderOperation.hide())
         history.push(PATH.HOME)
         console.log(e)
       })

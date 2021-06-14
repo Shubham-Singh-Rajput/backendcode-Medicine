@@ -16,6 +16,7 @@ import VALIDATION from './../../redux/action/Token/index';
 import { Redirect } from 'react-router';
 import PATH from './../../config/webPath';
 import TYPECHECK from './../../redux/action/Type/index';
+import LoderOperation from './../../redux/action/Loder/index';
 
 function Copyright() {
   return (
@@ -73,6 +74,7 @@ export default function UserSignUp() {
   const TOKENS=useSelector(({Token})=>Token)
   const SubmitDetail=(e)=>{
       e.preventDefault()
+      dispatch(LoderOperation.show())
     var data = new FormData()
     data.append('name',name)
     data.append('email',email)
@@ -88,14 +90,17 @@ export default function UserSignUp() {
           
           if(Object.keys(d.err).length>0 || d.msg){
             setError((err)=>({...err,...d.err,...d.msg}))
+            dispatch(LoderOperation.hide())
           } 
           else{
             dispatch(VALIDATION.createToken(d.data[0]))
             dispatch(TYPECHECK.getType(d.data[1]))
+            dispatch(LoderOperation.hide())
           }
       }).catch(e=>{
         dispatch(VALIDATION.removeToken())
         dispatch(TYPECHECK.removeType())
+        dispatch(LoderOperation.hide())
       })
 
   }

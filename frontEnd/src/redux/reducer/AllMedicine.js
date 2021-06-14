@@ -1,6 +1,6 @@
 import { ALLMEDICINE } from "../actionTypes"
 
-
+// this redux  store all the medicine of shopkeper which is created now
 const initialState=[]
 const Allmedicine=(state,action)=>{
     state=state||initialState

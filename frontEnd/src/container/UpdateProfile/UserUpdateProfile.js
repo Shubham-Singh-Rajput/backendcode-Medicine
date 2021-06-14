@@ -15,7 +15,8 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import PATH from './../../config/webPath';
 import { useEffect } from 'react';
-
+import LoderOperation from './../../redux/action/Loder/index';
+import { useDispatch } from 'react-redux';
 
 function Copyright() {
   return (
@@ -63,6 +64,7 @@ export default function USERUPDATEPROFILE({history}) {
   const [err,setError]=useState({
       msg:''
   })
+  const dispatch=useDispatch()
   const imageUpload=(e)=>{
       setFile(e.target.files[0])
   }
@@ -74,10 +76,11 @@ export default function USERUPDATEPROFILE({history}) {
 //   const {type,_id}=USERPROFILE.currentUser
   const SUBMIT=(e)=>{
       e.preventDefault()
+      dispatch(LoderOperation.show())
       var data = new FormData()
         data.append('name',name||USERPROFILE?.currentUser?.name)
         data.append('email',email)
-        data.append('password',password||USERPROFILE?.currentUser?.password)
+        data.append('password',password)
         data.append('Address',Address||USERPROFILE?.currentUser?.Address)
         data.append('mobileNo',mobileNumber)
         data.append('image',file)
@@ -89,12 +92,14 @@ export default function USERUPDATEPROFILE({history}) {
         }
       }).then(d=>d.json()).then(d=>{
           if(Object.keys(d.err).length!==0){
+            dispatch(LoderOperation.hide())
               setError((s)=>({...s,...d.err}))
           }
           else{
+            dispatch(LoderOperation.hide())
               history.push(PATH.PROFILE)
           }
-      })
+      }).catch(e=>dispatch(LoderOperation.hide()))
   }
   return (
     <>

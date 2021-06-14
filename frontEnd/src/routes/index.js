@@ -12,6 +12,9 @@ import UPDATESHOPKEPERPROFILE from './../container/UpdateProfile/UpdateShopkeper
 import AddingMedicine from './../container/Medicine/Addmedicine';
 import AllMedicineOfSingleAdmin from './../container/Medicine/singleShopkepermedicine';
 import UPDATEMEDICINE from './../container/Medicine/UpdateMedicine';
+import MedicineDetail from './../container/User/Medicinedetail';
+import Cart from './../container/User/Cart';
+import AllCatItems from './../container/User/AllCartItems';
 
 export const routes=[
 {exact : true , path:PATH.HOME,component:Home},
@@ -27,4 +30,7 @@ export const routes=[
 {exact : true , path:PATH.ADDMEDICINE,component:AddingMedicine},
 {exact : true , path:PATH.ALLMEDICINEOFSINGLEADMIN,component:AllMedicineOfSingleAdmin},
 {exact : true , path:PATH.UPDATEMEDICINEBYADMIN,component:UPDATEMEDICINE},
+{exact : true , path:PATH.MEDICINEDETAILS,component:MedicineDetail},
+{exact : true , path:PATH.ADDITEMTOCART,component:Cart},
+{exact : true , path:PATH.CARTITEMS,component:AllCatItems},
 ]

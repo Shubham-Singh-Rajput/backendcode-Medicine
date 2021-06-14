@@ -1,5 +1,6 @@
 import { TOKEN } from "../actionTypes"
 const initialState=''
+// this function is used to store the token value in store
 const Token=(state,action)=>{
     state=state||localStorage.getItem('token')||initialState
     switch(action.type){

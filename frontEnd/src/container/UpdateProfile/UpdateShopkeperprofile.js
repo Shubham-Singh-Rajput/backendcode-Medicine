@@ -15,6 +15,8 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import PATH from './../../config/webPath';
 import { useEffect } from 'react';
+import LoderOperation from './../../redux/action/Loder/index';
+import { useDispatch } from 'react-redux';
 
 
 function Copyright() {
@@ -62,6 +64,7 @@ export default function UPDATESHOPKEPERPROFILE({history}) {
   const [shopName,setShopname]=useState(USERPROFILE?.Shoapkeper?.shopName)
   const [file,setFile]=useState('')
   const [err,setError]=useState({msg:''})
+  const dispatch=useDispatch()
   const imageUpload=(e)=>{
       setFile(e.target.files[0])
   }
@@ -78,14 +81,16 @@ export default function UPDATESHOPKEPERPROFILE({history}) {
   },[USERPROFILE])
   const SUBMIT=(e)=>{
       e.preventDefault()
+      dispatch(LoderOperation.show())
       var data = new FormData()
         data.append('name',name||USERPROFILE?.Shoapkeper?.name)
         data.append('email',email)
-        data.append('password',password||USERPROFILE?.Shoapkeper?.password)
+        data.append('password',password)
         data.append('Address',Address||USERPROFILE?.Shoapkeper?.Address)
         data.append('mobileNo',mobileNumber)
         data.append('shopName',shopName||USERPROFILE?.Shoapkeper?.shopName)
         data.append('image',file)
+        console.log(password||USERPROFILE?.Shoapkeper?.password)
       fetch('http://localhost:2000/shoapkeper/updateprofile',{
         method:"POST",
         body:data,
@@ -94,12 +99,14 @@ export default function UPDATESHOPKEPERPROFILE({history}) {
         }
       }).then(d=>d.json()).then(d=>{
           if(Object.keys(d.err).length!==0){
+            dispatch(LoderOperation.hide())
               setError((s)=>({...s,...d.err}))
           }
           else{
+            dispatch(LoderOperation.hide())
               history.push(PATH.PROFILE)
           }
-      })
+      }).catch(e=>dispatch(LoderOperation.hide()))
   }
   return (
     <>

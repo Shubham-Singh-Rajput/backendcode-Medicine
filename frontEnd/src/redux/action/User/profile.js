@@ -1,6 +1,7 @@
 
 import { PROFILE } from './../../actionTypes/index';
 const USER={
+    // on running this function this will store the profile of user
     PROFILE:(dispatch,store)=>{
         return fetch('http://localhost:2000/user/profile',{
             headers:{

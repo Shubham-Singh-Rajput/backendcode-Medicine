@@ -14,6 +14,11 @@ const PATH={
     ADDMEDICINE:'/shoapkeper/addmedicine',
     ALLMEDICINEOFSINGLEADMIN:'/shoapkeper/single/allmedicine',
     UPDATEMEDICINE:'/update/medicine',//show All medicine of single user
-    UPDATEMEDICINEBYADMIN:'/update/medicine/:id'
+    UPDATEMEDICINEBYADMIN:'/update/medicine/:id',
+    MEDICINEDETAIL:'/detail/medicine',
+    MEDICINEDETAILS:'/detail/medicine/:id',
+    DYNAMICCARTROUTE:'/cart/detail',
+    ADDITEMTOCART:'/cart/detail/:id',
+    CARTITEMS:'/cart/items'
 }
 export default PATH

@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import PATH from './../../config/webPath';
 import SingleAdminMedicine from './../../redux/action/Shopkeper/singleUserMedicine';
 import { useDispatch } from 'react-redux';
+import LoderOperation from './../../redux/action/Loder/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +50,7 @@ export default function AllMedicineOfSingleAdmin({history}) {
   const dispatch=useDispatch()
   useEffect(()=>{
       if(TOKEN.length>0 && TYPE==='shopkeper'){
+        dispatch(LoderOperation.show())
         fetch('http://localhost:2000/shoapkeper/single/allmedicine',{
             headers:{
                 token:TOKEN
@@ -56,14 +58,17 @@ export default function AllMedicineOfSingleAdmin({history}) {
         }).then(d=>d.json()).then(d=>{
             // console.log(d)
             if(Object.keys(d.err).length>0){
+              dispatch(LoderOperation.hide())
 
             }else{
                 setMedicine(s=>(d.data[0].medicine))
                 dispatch(SingleAdminMedicine.AddMedicines(d.data[0].medicine))
+                dispatch(LoderOperation.hide())
             }
         })}
         else{
             history.push(PATH.HOME)
+            dispatch(LoderOperation.hide())
             dispatch(SingleAdminMedicine.deletemedicine())
         }
   },[TOKEN,TYPE,history,dispatch])

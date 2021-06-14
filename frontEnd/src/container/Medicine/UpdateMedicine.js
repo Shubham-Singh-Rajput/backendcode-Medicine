@@ -16,6 +16,8 @@ import { Redirect } from 'react-router';
 import PATH from './../../config/webPath';
 import { useMemo } from 'react';
 import { useEffect } from 'react';
+import LoderOperation from './../../redux/action/Loder/index';
+import { useDispatch } from 'react-redux';
 
 function Copyright() {
   return (
@@ -55,6 +57,7 @@ export default function UPDATEMEDICINE({history,location,match}) {
   const AllMedicine=useSelector(({SingleAdminMedicine})=>SingleAdminMedicine)
   const TOKEN=useSelector(({Token})=>Token)
   const TYPE=useSelector(({Type})=>Type)
+  const dispatch=useDispatch()
   const CurrentMedicines=useMemo(()=>{
       return AllMedicine.filter(i=>i._id===match.params.id)
   },[match,AllMedicine])
@@ -64,6 +67,7 @@ export default function UPDATEMEDICINE({history,location,match}) {
   const TOKENS=useSelector(({Token})=>Token)
   const SubmitDetail=(e)=>{
       e.preventDefault()
+      dispatch(LoderOperation.show())
       fetch(`http://localhost:2000/shoapkeper/update/medicine/${CurrentMedicines[0]._id}`,{
           method:'POST',
         headers:{
@@ -73,12 +77,14 @@ export default function UPDATEMEDICINE({history,location,match}) {
         body:JSON.stringify({price:price||CurrentMedicines[0]?.price,quantity:quantity||CurrentMedicines[0]?.quantity})
       }).then(d=>d.json()).then(d=>{
           if(Object.keys(d.err).length>0){
+            dispatch(LoderOperation.hide())
               history.push(PATH.HOME)
           }
           else{
+            dispatch(LoderOperation.hide())
             history.push(PATH.ALLMEDICINEOFSINGLEADMIN)
           }
-      })
+      }).catch(e=>dispatch(LoderOperation.hide()))
      
   }
   useEffect(()=>{
