@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AllCatItems() {
+export default function AllCatItems({history}) {
   const classes = useStyles();
   const [CartItems,setItems]=useState([])
   const TOKEN=useSelector(({Token})=>Token)
@@ -39,14 +39,32 @@ export default function AllCatItems() {
         }
     }).then(d=>d.json()).then(d=>{
       dispatch(LoderOperation.hide())
+      
         setItems(d.data)
     })
 }
   },[TOKEN,TYPE,dispatch])
+
+
+  const REMOVEITEMS=(id)=>{
+    dispatch(LoderOperation.show())
+    fetch(`http://localhost:2000/user/remove/medicine/cart/${id}`,{
+      method:"POST",
+      headers:{
+        token:TOKEN
+      }
+    }).then(d=>d.json()).then(d=>{
+      dispatch(LoderOperation.hide())
+      setItems(CartItems.filter((item)=>item._id!==id))
+      
+    }).catch(e=>{dispatch(LoderOperation.hide())})
+  }
+  
   return (
   <>
   {TYPE==='user' && TOKEN.length!==0?
   <div style={{display:'flex',justifyContent:'space-evenly',flexWrap:'wrap'}} >{
+    
   CartItems.map((item,i)=>{
     var date = new Date(item?.date);
       return (
@@ -67,16 +85,19 @@ export default function AllCatItems() {
           <Typography gutterBottom variant="h5" component="h2">
           Quantity Ordered:{item?.quantity}
           </Typography>
+          <Typography gutterBottom variant="h5" component="h2">
+          TOTAL PRICE:{item?.quantity*item?.medicineDetail?.price}
+          </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={()=>history.push(`${PATH.BUYITEM}/${item._id}/${item.medicineDetail._id}`)}>
           BUY
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={()=>{REMOVEITEMS(item._id)}}>
           REMOVE
         </Button>
       </CardActions>
