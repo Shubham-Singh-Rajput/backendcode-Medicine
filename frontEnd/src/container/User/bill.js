@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-
 import Grid from '@material-ui/core/Grid';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -9,7 +8,7 @@ import PATH from './../../config/webPath';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-
+import ReactToPdf from 'react-to-pdf'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Bill({match}) {
+function Download({match}) {
   const classes = useStyles();
   const TOKEN=useSelector(({Token})=>Token)
   const TYPE=useSelector(({Type})=>Type)
@@ -43,7 +42,8 @@ export default function Bill({match}) {
   return (
       
     <React.Fragment>
-        {TOKEN?.length && TYPE==='user'?<>
+        {TOKEN?.length && TYPE==='user'?<div  style={{margin:'auto',width:"60%"}}>
+        <div >
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
@@ -76,8 +76,28 @@ export default function Bill({match}) {
             CASH ON DELIVERY
           </Typography>
         </Grid>
-      </Grid></>:<Redirect to ={PATH.HOME}></Redirect>
+      </Grid></div></div>:<Redirect to ={PATH.HOME}></Redirect>
 }
     </React.Fragment>
   );
 }
+const Bill=({match})=>{
+  const TOKEN=useSelector(({Token})=>Token)
+  const TYPE=useSelector(({Type})=>Type)
+  return (
+      <>
+      {TOKEN?.length && TYPE==='user'?<>
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+      <ReactToPdf>
+  {({toPdf, targetRef}) =>  (
+      <>
+      <div style={{width:'60%',margin:'auto'}}  ref={targetRef}><Download match={match}/></div>
+      <button onClick={toPdf}>DOWNLOAD BILL</button>
+      </>
+  )}
+</ReactToPdf>
+</div></>:<Redirect to ={PATH.HOME}></Redirect>}
+      </>
+  )
+}
+export default Bill

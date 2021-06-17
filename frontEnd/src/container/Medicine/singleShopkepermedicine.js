@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-
+import './../Home/style.css'
 
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
@@ -76,8 +76,9 @@ export default function AllMedicineOfSingleAdmin({history}) {
     <>
     <div style={{display:'flex',margin:'2%' ,flexWrap:'wrap',justifyContent:'space-between'}}>
     {MEDICINE.map((item,i)=>{
-        return (
-    <Card className={classes.root} key={i} onClick={()=>{history.push(`${PATH.UPDATEMEDICINE}/${item._id}`)}}>
+        return ( 
+          <div className='trying' key={i}>
+    <Card className={classes.root}  onClick={()=>{history.push(`${PATH.UPDATEMEDICINE}/${item._id}`)}}>
       <CardMedia
         className={classes.media}
         image={item.photo}
@@ -99,6 +100,7 @@ export default function AllMedicineOfSingleAdmin({history}) {
         </Typography>
       </CardContent>
     </Card>
+    </div>
         )
     })}
     </div>

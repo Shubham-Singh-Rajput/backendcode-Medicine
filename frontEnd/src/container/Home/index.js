@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import AllMedicines from './../../redux/action/AllMedicine/index';
 // import LoderOperation from './../../redux/action/Loder/index';
+import "./style.css"
 import Models from './../../compnent/Modal'
 import PATH from './../../config/webPath';
 const useStyles = makeStyles((theme) => ({
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
+
   },
   avatar: {
     backgroundColor: red[500],
@@ -61,7 +63,10 @@ const Home =({history})=>{
         {MEDICINE.map((item,i)=>{
           var date=new Date(item?.date).toLocaleDateString()
             return (
-        <Card className={classes.root} key={i} onClick={(e)=>TYPE.length===0?handleOpen(e):TYPE==='user'?DETAIL(item._id):null}>
+              <div className='trying' key={i}>
+        <Card className={classes.root} 
+        
+         onClick={(e)=>TYPE.length===0?handleOpen(e):TYPE==='user'?DETAIL(item._id):null}>
           
           <CardMedia
             className={classes.media}
@@ -84,6 +89,7 @@ const Home =({history})=>{
             </Typography>
           </CardContent>
         </Card>
+        </div>
             )
         })}
         </div>
