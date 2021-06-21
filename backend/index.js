@@ -9,7 +9,7 @@ const app=server()
 // use Cors for fronTend
 const cors=require("cors")
 
-const Port = 2000
+const Port = process.env.PORT||2000
 
 mongooseConnection()
 app.use(server.json())
